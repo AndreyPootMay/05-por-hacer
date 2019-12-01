@@ -18,6 +18,11 @@ const loadDb = () => {
     }
 }
 
+const getList = () => {
+    loadDb();
+    return todoList;
+}
+
 const create = (description) => {
     loadDb();
     
@@ -32,6 +37,39 @@ const create = (description) => {
   return todo;
 }
 
+const update = (description, completed = true) => {
+    loadDb();
+
+    let index = todoList.findIndex( task => task.description === description);
+
+    if (index >= 0) {
+        todoList[index].completed = completed;
+        createDb();
+        return true;
+    } else {
+        return false;
+    }
+}
+
+const deleting = (description) => {
+    loadDb();
+
+    let newList = todoList.filter(task => {
+        return task.description !== description;
+    });
+
+    if (todoList.length === newList.length) {
+        return false;
+    } else {
+        todoList = newList;
+        createDb();
+        return true;
+    }
+}
+
 module.exports = {
-    create
+    create,
+    getList,
+    update,
+    deleting
 }
